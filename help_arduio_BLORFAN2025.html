@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projets Arduino - Dr. Ayman BLORFAN 2025</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #34495e;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f7fa;
+        }
+        
+        .slide {
+            width: 85%;
+            min-height: 90vh;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: white;
+            display: none;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        .slide-title {
+            color: var(--primary);
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        .project-container {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .demo {
+            flex: 1;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .code {
+            flex: 1;
+            background: var(--dark);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            overflow: auto;
+            max-height: 60vh;
+        }
+        
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .nav-btn {
+            padding: 12px 30px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .sensor {
+            background: white;
+            padding: 18px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .active {
+            background: #ffebee;
+            border-left: 4px solid var(--accent);
+        }
+        
+        #slide-indicator {
+            text-align: center;
+            margin: 20px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .highlight {
+            background: #ffeb3b;
+            box-shadow: 0 0 0 2px #ff9800;
+            transition: all 0.3s;
+        }
+        
+        #joystick-area {
+            width: 200px;
+            height: 200px;
+            background: #eee;
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+            touch-action: none;
+        }
+        
+        #joystick {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: absolute;
+            top: 80px;
+            left: 80px;
+            transition: transform 0.1s;
+        }
+        
+        #garage-door {
+            width: 200px;
+            height: 150px;
+            background: #555;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #door {
+            height: 100%;
+            background: #333;
+            transition: transform 1s;
+        }
+        
+        #fingerprint-scanner {
+            width: 150px;
+            height: 200px;
+            background: var(--dark);
+            border-radius: 10px;
+            margin: 20px auto;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        #lock-status {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin: 20px auto;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+        
+        .unlocked {
+            background: var(--success) !important;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="slide-indicator">Projet 1/4 - Système de Sécurité Domestique</div>
+
+    <!-- Slide 1 - Système de Sécurité -->
+    <div class="slide" id="slide1">
+        <h1 class="slide-title">Système de Sécurité Domestique</h1>
+        <div class="project-container">
+            <div class="demo">
+                <h2 style="color: var(--accent);">Démonstration Interactive</h2>
+                
+                <div class="sensor" id="pir-sensor">
+                    <h3>Capteur de Mouvement (PIR)</h3>
+                    <p>État: <span id="pir-status">Inactif</span></p>
+                    <button onclick="toggleSensor('pir'); highlightCode('pir-code')" class="nav-btn">
+                        Tester le Capteur
+                    </button>
+                </div>
+                
+                <div class="sensor" id="vib-sensor">
+                    <h3>Capteur de Vibration</h3>
+                    <p>État: <span id="vib-status">Inactif</span></p>
+                    <button onclick="toggleSensor('vib'); highlightCode('vib-code')" class="nav-btn">
+                        Simuler Vibration
+                    </button>
+                </div>
+            </div>
+            
+            <div class="code">
+                <h2 style="color: var(--secondary);">Code Arduino</h2>
+                <pre>
+// Système de Sécurité Domestique
+#include <PIR.h>
+#include <Buzzer.h>
+
+#define PIR_PIN 2
+#define BUZZER_PIN 8
+#define VIBRATION_PIN 3
+
+PIR pir(PIR_PIN);
+Buzzer buzzer(BUZZER_PIN);
+
+void setup() {
+    Serial.begin(9600);
+    pinMode(VIBRATION_PIN, INPUT);
+}
+
+void loop() {
+    <span id="pir-code">if(pir.detect()) {
+        buzzer.on();
+        Serial.println("ALERTE: Mouvement détecté!");
+    }</span>
+    
+    <span id="vib-code">if(digitalRead(VIBRATION_PIN) == HIGH) {
+        buzzer.on();
+        Serial.println("ALERTE: Vibration détectée!");
+    }</span>
+    
+    delay(100);
+}
+                </pre>
+            </div>
+        </div>
+        <div class="footer">
+            Dr. Ayman BLORFAN - 2025
+        </div>
+    </div>
+
+    <!-- Slide 2 - Garage Intelligent -->
+    <div class="slide" id="slide2">
+        <h1 class="slide-title">Garage Intelligent</h1>
+        <div class="project-container">
+            <div class="demo">
+                <h2 style="color: var(--accent);">Simulation</h2>
+                
+                <div style="text-align: center;">
+                    <div id="garage-door">
+                        <div id="door"></div>
+                    </div>
+                    
+                    <button onclick="openGarageDoor(); highlightCode('garage-code')" class="nav-btn">
+                        Ouvrir Porte
+                    </button>
+                    <button onclick="closeGarageDoor(); highlightCode('garage-close')" class="nav-btn">
+                        Fermer Porte
+                    </button>
+                </div>
+            </div>
+            
+            <div class="code">
+                <h2 style="color: var(--secondary);">Code Arduino</h2>
+                <pre>
+// Garage Intelligent
+#include <Servo.h>
+#include <HCSR04.h>
+
+#define TRIG_PIN 5
+#define ECHO_PIN 6
+#define SERVO_PIN 9
+
+Servo garageDoor;
+UltraSonicDistanceSensor sonar(TRIG_PIN, ECHO_PIN);
+
+void setup() {
+    garageDoor.attach(SERVO_PIN);
+    Serial.begin(9600);
+}
+
+void loop() {
+    float distance = sonar.measureDistanceCm();
+    
+    <span id="garage-code">if(distance < 50) {
+        garageDoor.write(90); // Ouvrir
+        Serial.println("Porte ouverte");
+    }</span>
+    
+    <span id="garage-close">else {
+        garageDoor.write(0); // Fermer
+    }</span>
+    
+    delay(500);
+}
+                </pre>
+            </div>
+        </div>
+        <div class="footer">
+            Dr. Ayman BLORFAN - 2025
+        </div>
+    </div>
+
+    <!-- Slide 3 - Voiture Télécommandée -->
+    <div class="slide" id="slide3">
+        <h1 class="slide-title">Voiture Télécommandée</h1>
+        <div class="project-container">
+            <div class="demo">
+                <h2 style="color: var(--accent);">Contrôleur</h2>
+                
+                <div style="text-align: center;">
+                    <div id="joystick-area">
+                        <div id="joystick"></div>
+                    </div>
+                    <p>Direction: <strong id="direction">Neutre</strong></p>
+                </div>
+            </div>
+            
+            <div class="code">
+                <h2 style="color: var(--secondary);">Code Arduino</h2>
+                <pre>
+// Voiture Télécommandée
+#include <AFMotor.h>
+
+AF_DCMotor motor1(1);
+AF_DCMotor motor2(2);
+
+void setup() {
+    Serial.begin(9600);
+    motor1.setSpeed(255);
+    motor2.setSpeed(255);
+}
+
+void loop() {
+    if(Serial.available()) {
+        char cmd = Serial.read();
+        
+        <span id="forward-code">case 'F': // Avancer
+            motor1.run(FORWARD);
+            motor2.run(FORWARD);</span>
+        
+        <span id="backward-code">case 'B': // Reculer
+            motor1.run(BACKWARD);
+            motor2.run(BACKWARD);</span>
+        
+        <span id="left-code">case 'L': // Gauche
+            motor1.run(BACKWARD);
+            motor2.run(FORWARD);</span>
+        
+        <span id="right-code">case 'R': // Droite
+            motor1.run(FORWARD);
+            motor2.run(BACKWARD);</span>
+    }
+}
+                </pre>
+            </div>
+        </div>
+        <div class="footer">
+            Dr. Ayman BLORFAN - 2025
+        </div>
+    </div>
+
+    <!-- Slide 4 - Serrure Intelligente -->
+    <div class="slide" id="slide4">
+        <h1 class="slide-title">Serrure par Empreinte</h1>
+        <div class="project-container">
+            <div class="demo">
+                <h2 style="color: var(--accent);">Interface</h2>
+                
+                <div style="text-align: center;">
+                    <div id="fingerprint-scanner" onclick="scanFinger(); highlightCode('finger-code')">
+                        Scanner Empreinte
+                    </div>
+                    
+                    <div id="lock-status">VERROUILLÉ</div>
+                </div>
+            </div>
+            
+            <div class="code">
+                <h2 style="color: var(--secondary);">Code Arduino</h2>
+                <pre>
+// Serrure par Empreinte
+#include <Adafruit_Fingerprint.h>
+#include <Servo.h>
+
+SoftwareSerial fingerSerial(2, 3);
+Adafruit_Fingerprint finger = Adafruit_Fingerprint(&fingerSerial);
+Servo lockServo;
+
+void setup() {
+    Serial.begin(9600);
+    finger.begin(57600);
+    lockServo.attach(9);
+    lockServo.write(0); // Verrouillé
+}
+
+void loop() {
+    <span id="finger-code">if(getFingerprintID() != -1) {
+        lockServo.write(90); // Déverrouiller
+        delay(5000);
+        lockServo.write(0); // Verrouiller
+    }</span>
+}
+                </pre>
+            </div>
+        </div>
+        <div class="footer">
+            Dr. Ayman BLORFAN - 2025
+        </div>
+    </div>
+
+    <div class="nav-buttons">
+        <button onclick="prevSlide()" class="nav-btn" id="prev-btn" disabled>Précédent</button>
+        <button onclick="nextSlide()" class="nav-btn" id="next-btn">Suivant</button>
+    </div>
+
+    <script>
+        // Navigation entre slides
+        let currentSlide = 1;
+        const totalSlides = 4;
+        
+        function showSlide(n) {
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.style.display = 'none';
+            });
+            document.getElementById(`slide${n}`).style.display = 'block';
+            
+            const titles = [
+                "Système de Sécurité Domestique",
+                "Garage Intelligent",
+                "Voiture Télécommandée",
+                "Serrure par Empreinte"
+            ];
+            document.getElementById('slide-indicator').textContent = 
+                `Projet ${n}/${totalSlides} - ${titles[n-1]}`;
+            
+            document.getElementById('prev-btn').disabled = n === 1;
+            document.getElementById('next-btn').disabled = n === totalSlides;
+        }
+        
+        function nextSlide() {
+            if(currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+        
+        function prevSlide() {
+            if(currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+        
+        // Fonction de surlignage
+        function highlightCode(elementId) {
+            document.querySelectorAll('.code span').forEach(el => {
+                el.classList.remove('highlight');
+            });
+            
+            const element = document.getElementById(elementId);
+            if(element) {
+                element.classList.add('highlight');
+                setTimeout(() => {
+                    element.classList.remove('highlight');
+                }, 3000);
+            }
+        }
+        
+        // Système de Sécurité
+        function toggleSensor(type) {
+            const element = document.getElementById(`${type}-sensor`);
+            const status = document.getElementById(`${type}-status`);
+            
+            element.classList.toggle('active');
+            
+            if(element.classList.contains('active')) {
+                status.textContent = 'ALERTE!';
+                status.style.color = 'red';
+            } else {
+                status.textContent = 'Inactif';
+                status.style.color = 'green';
+            }
+        }
+        
+        // Garage Intelligent
+        function openGarageDoor() {
+            document.getElementById('door').style.transform = 'translateY(-100%)';
+        }
+        
+        function closeGarageDoor() {
+            document.getElementById('door').style.transform = 'translateY(0)';
+        }
+        
+        // Voiture RC
+        const joystickArea = document.getElementById('joystick-area');
+        const joystick = document.getElementById('joystick');
+        
+        joystickArea.addEventListener('mousedown', startDrag);
+        joystickArea.addEventListener('touchstart', startDrag);
+        
+        function startDrag(e) {
+            e.preventDefault();
+            window.addEventListener('mousemove', moveJoystick);
+            window.addEventListener('touchmove', moveJoystick);
+            window.addEventListener('mouseup', stopDrag);
+            window.addEventListener('touchend', stopDrag);
+        }
+        
+        function moveJoystick(e) {
+            const rect = joystickArea.getBoundingClientRect();
+            const centerX = rect.left + rect.width/2;
+            const centerY = rect.top + rect.height/2;
+            
+            let clientX, clientY;
+            
+            if(e.type === 'touchmove') {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            let x = clientX - centerX;
+            let y = clientY - centerY;
+            
+            const maxDist = rect.width/2 - 20;
+            const dist = Math.min(Math.sqrt(x*x + y*y), maxDist);
+            const angle = Math.atan2(y, x);
+            
+            x = dist * Math.cos(angle);
+            y = dist * Math.sin(angle);
+            
+            joystick.style.transform = `translate(${x}px, ${y}px)`;
+            
+            let direction = "Neutre";
+            if(dist > 30) {
+                if(Math.abs(angle) < Math.PI/4) direction = "Droite";
+                else if(Math.abs(angle) > 3*Math.PI/4) direction = "Gauche";
+                else if(angle > 0) direction = "Reculer";
+                else direction = "Avancer";
+            }
+            
+            document.getElementById('direction').textContent = direction;
+        }
+        
+        function stopDrag() {
+            joystick.style.transform = 'translate(0, 0)';
+            document.getElementById('direction').textContent = 'Neutre';
+            window.removeEventListener('mousemove', moveJoystick);
+            window.removeEventListener('touchmove', moveJoystick);
+        }
+        
+        // Serrure Intelligente
+        function scanFinger() {
+            const scanner = document.getElementById('fingerprint-scanner');
+            const lockStatus = document.getElementById('lock-status');
+            
+            scanner.textContent = "Scan en cours...";
+            
+            setTimeout(() => {
+                if(Math.random() > 0.3) { // 70% de succès
+                    scanner.textContent = "Accès autorisé";
+                    lockStatus.textContent = "OUVERT";
+                    lockStatus.style.background = "var(--success)";
+                    
+                    setTimeout(() => {
+                        lockStatus.textContent = "VERROUILLÉ";
+                        lockStatus.style.background = "var(--accent)";
+                        scanner.textContent = "Scanner Empreinte";
+                    }, 3000);
+                } else {
+                    scanner.textContent = "Accès refusé";
+                    setTimeout(() => {
+                        scanner.textContent = "Scanner Empreinte";
+                    }, 2000);
+                }
+            }, 2000);
+        }
+        
+        // Initialisation
+        showSlide(1);
+    </script>
+</body>
+</html>
